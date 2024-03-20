@@ -14,8 +14,11 @@ import androidx.compose.ui.tooling.preview.Preview
 
 
 // TODO: 1. Get available sizes, then:
-//       Set 2. sun to left side,
-//           3. moon to right side
+//       Set 1.1. sun to left side,
+//           1.2. moon to right side
+
+// TODO: 2. Allow to sun / moon can be set with color, texture, icon?
+//  (increase difficulty of work with animations)
 @Composable
 fun SunToMoon(
     enabled: MutableState<Boolean>,
