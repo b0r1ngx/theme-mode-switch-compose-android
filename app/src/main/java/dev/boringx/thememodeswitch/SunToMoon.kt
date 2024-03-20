@@ -6,61 +6,38 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
 
 
+// TODO: 1. Get available sizes, then:
+//       Set 2. sun to left side,
+//           3. moon to right side
 @Composable
-fun SunToMoon() {
-
-    val sunColor = Color.Yellow
-    val moonColor = Color.Gray
-
-    var enabled by remember { mutableStateOf(false) }
-    val color: Color by animateColorAsState(if (enabled) moonColor else sunColor)
-    val center: Float by animateFloatAsState(if (enabled) 250f else 100f)
-    val intersectRadius: Float by animateFloatAsState(if (enabled) 100f else 0f)
-
-    Canvas(modifier = Modifier
-        .fillMaxSize()
-        .clickable { enabled = !enabled }
-    ) {
-        drawSunToMoonWithPath(color = color, center = center, intersectRadius = intersectRadius)
-    }
-}
-
-fun DrawScope.drawSunToMoon(
-    radius: Float = 100f,
-    color: Color,
-    center: Float,
-    intersectRadius: Float
+fun SunToMoon(
+    enabled: MutableState<Boolean>,
+    sunColor: Color = Color.Yellow,
+    moonColor: Color = Color.Gray
 ) {
-    val moonCenterX = center
-    val moonCenterY = size.height / 2
+    with(enabled.value) {
+        val color: Color by animateColorAsState(if (this) moonColor else sunColor)
+        val center: Float by animateFloatAsState(if (this) 250f else 100f)
+        val intersectRadius: Float by animateFloatAsState(if (this) 100f else 0f)
 
-    // Draw the full circle of the moon
-    drawCircle(
-        color = color,
-        center = Offset(moonCenterX, moonCenterY),
-        radius = radius
-    )
-
-    drawCircle(
-        color = Color.White, // background color
-        center = Offset(moonCenterX - 50, moonCenterY),
-        radius = intersectRadius
-    )
+        Canvas(modifier = Modifier
+            .fillMaxSize()
+            .clickable { enabled.value = !this }
+        ) {
+            drawSunToMoonWithPath(color = color, center = center, intersectRadius = intersectRadius)
+        }
+    }
 }
 
 @Preview
 @Composable
 fun PreviewSunToMoon() {
-    SunToMoon()
+//    SunToMoon()
 }

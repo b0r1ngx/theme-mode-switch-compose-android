@@ -1,44 +1,37 @@
 package dev.boringx.thememodeswitch
 
-import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
-import androidx.compose.animation.graphics.res.animatedVectorResource
-import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
-import androidx.compose.animation.graphics.vector.AnimatedImageVector
-import androidx.compose.foundation.Canvas
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalAnimationGraphicsApi::class)
+// Sun -> Moon
+// ☀️ -> 🌒 / 🌙 / 🌛
 @Composable
-fun ThemeModeSwitch(
-    modifier: Modifier = Modifier
-) {
-    // Sun -> Moon
-    // ☀️ -> 🌒 / 🌙 / 🌛
-    val drawable = AnimatedImageVector.animatedVectorResource(R.drawable.ic_launcher_foreground)
-    var atEnd by remember { mutableStateOf(false) }
+fun ThemeModeSwitch(modifier: Modifier = Modifier) {
+    val enabled = remember { mutableStateOf(false) }
 
-    IconButton(onClick = { atEnd = !atEnd }) {
-        Icon(
-            painter = rememberAnimatedVectorPainter(animatedImageVector = drawable, atEnd = atEnd),
-            contentDescription = null
-        )
+    val lightSkyColor = Color(0xFF21b0fe)
+    val darkSkyColor = Color(0xFF0d3b66)
+    val backgroundColor: Color by animateColorAsState(if (enabled.value) darkSkyColor else lightSkyColor)
 
-    }
-    Canvas(modifier = modifier) {
-//        drawArc(
-//            color = Color.Yellow
-//        )
-//
-//        drawArc(
-//            color = Color.Gray
-//        )
-//        drawCircle(color = Color.Yellow)
+    Box(
+        modifier = modifier
+            .size(width = 200.dp, height = 100.dp)
+            .clip(RoundedCornerShape(50))
+            .background(color = backgroundColor)
+            .padding(all = 20.dp)
+    ) {
+        SunToMoon(enabled)
     }
 }
